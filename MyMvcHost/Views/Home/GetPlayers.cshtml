@@ -1,5 +1,5 @@
-﻿@* @using SharedModelsLib;
-@model List<Player>
+﻿@using SharedModelsLib.Dto;
+@model List<PlayerDto>
 
 @{
     ViewData["Title"] = "Liste des joueurs";
@@ -16,4 +16,4 @@ else
                render-mode="Server"
                param-Players="Model" />
 }
- *@
+

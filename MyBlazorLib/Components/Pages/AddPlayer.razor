@@ -1,8 +1,8 @@
-﻿@* @page "/players/add"
+﻿@page "/players/add"
 
 @inject NavigationManager NavManager
 @using System.Text.Json
-@using SharedModelsLib
+@using SharedModelsLib.Dto
 @rendermode InteractiveServer
 
 <h3 class="mb-4">Ajouter un joueur</h3>
@@ -27,13 +27,16 @@
         <label class="form-label">Pays d'origine</label>
         <InputText class="form-control"
                    @bind-Value="player.Country" />
-    </div>
+            </div>
 
-    <div class="mb-3">
-        <label class="form-label">Nom de l'équipe</label>
-        <InputText class="form-control"
-                   @bind-Value="player.TeamName" />
-    </div>
+            <div class="mb-3"> <label class="form-label">Équipe</label> 
+                <InputSelect class="form-select" @bind-Value="player.TeamId">
+                    <option value="0">-- Sélectionner une équipe --</option> 
+                    @foreach (var team in Teams) {
+                        <option value="@team.Id"> @team.Name </option>
+                    }
+                 </InputSelect> 
+            </div>
 
     <button type="submit" class="btn btn-primary">
         Ajouter le joueur
@@ -49,7 +52,10 @@
 }
 
 @code {
-    private Player player = new();
+    private PlayerDto player = new();
+
+    [Parameter]
+    public List<TeamDto> Teams { get; set; }
 
     private string? message;
 
@@ -63,4 +69,4 @@
    
 
 
-} *@
+}

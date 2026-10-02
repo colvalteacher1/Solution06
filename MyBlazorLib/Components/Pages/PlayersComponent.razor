@@ -1,14 +1,14 @@
-﻿@* @inject NavigationManager NavManager
+﻿@inject NavigationManager NavManager
 
-@using SharedModelsLib;
+@using SharedModelsLib.Dto;
 
 @if (Players != null)
 {
     <p class="badge bg-success">Il y a @Players.Count joueurs</p>
 }
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Liste des équipes</h2>
-    <a class="btn btn-primary" href="/players/add">Ajouter</a>
+    <h2 class="text-center mb-4">Liste des joueurs</h2>
+    <a class="btn btn-primary" href="/home/AddPlayerForm">Ajouter</a>
     <br />
     <br />
     <div class="table-responsive">
@@ -39,7 +39,5 @@
 @code {
 
     [Parameter]
-    public List<Player> Players { get; set; }
-
-    
-} *@
+    public List<PlayerDto> Players { get; set; } 
+}

@@ -1,5 +1,5 @@
-﻿@* 
-@using SharedModelsLib;
+﻿
+@using SharedModelsLib.Dto;
 
 @using System.Linq
 
@@ -42,7 +42,7 @@
 
 @code {
     [Parameter]
-    public List<Player> FilteredPlayers { get; set; }
+    public List<PlayerDto> FilteredPlayers { get; set; }
 
     private FilterModel filterModel = new()
     {
@@ -63,4 +63,4 @@
     {
         public string StartToken { get; set; }
     }
-} *@
+}

@@ -1,6 +1,6 @@
-﻿@* @inject NavigationManager NavManager
+﻿@inject NavigationManager NavManager
 
-@using SharedModelsLib;
+@using SharedModelsLib.Dto;
 
 @if (Teams != null)
 {
@@ -36,5 +36,5 @@
 @code {
 
     [Parameter]
-    public List<Team> Teams { get; set; }
-} *@
+    public List<TeamDto> Teams { get; set; }
+}

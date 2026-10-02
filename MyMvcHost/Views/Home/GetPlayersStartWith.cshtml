@@ -1,6 +1,6 @@
-﻿@* @using SharedModelsLib;
-@model List<Player>
+﻿@using SharedModelsLib.Dto;
+@model List<PlayerDto>
 
  <component type="typeof(MyBlazorLib.Components.Pages.GetPlayersStartWithComponent)"
                render-mode="Server"
-               param-FilteredPlayers="Model" /> *@
+               param-FilteredPlayers="Model" />

@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyMvcHost.Dal;
 using SharedModelsLib;
 using SharedModelsLib.Dto;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 
 namespace MyMvcHost.Controllers
@@ -30,13 +32,21 @@ namespace MyMvcHost.Controllers
                                             .ToList();
             return View(sports);
         }
-        /*
+        
         public IActionResult GetTeams(string sportName)
         { 
             if (sportName != null)
             {
-               List<Team> selectedTeams = AppDao.GetTeams().Where(t => t.Sport.Name == sportName).ToList();
-               return View(selectedTeams);
+                List<TeamDto> selectedTeams = context.Teams
+                                                     .Where(t => t.Sport.Name == sportName)
+                                                     .Select(t => new TeamDto
+                                                     {
+                                                         Id = t.Id,
+                                                         Name = t.Name,
+                                                         SportId = t.SportId
+                                                     })
+                                                     .ToList();
+                return View(selectedTeams);
             }
 
             return RedirectToAction("index");
@@ -46,31 +56,79 @@ namespace MyMvcHost.Controllers
         {
             if (teamName != null)
             {
-                List<Player> selectedPlayers = AppDao.GetPlayers().Where(p => p.TeamName == teamName).ToList();
+                List<PlayerDto> selectedPlayers = context.Players
+                                                            .AsNoTracking()
+                                                            .Where(p => p.Team.Name == teamName)
+                                                            .Select(p => new PlayerDto
+                                                            {
+                                                                Id = p.Id,
+                                                                Name = p.Name,
+                                                                Age = p.Age,
+                                                                Country = p.Country,
+                                                                TeamId = p.TeamId
+                                                            })
+                                                            .ToList(); 
                 return View(selectedPlayers);
             }
 
             return RedirectToAction("index");
         }
 
+        public IActionResult AddPlayerForm()
+        {
+            List<TeamDto> teams = context.Teams
+                                                .Select(t => new TeamDto
+                                                {
+                                                    Id = t.Id,
+                                                    Name = t.Name,
+                                                    SportId = t.SportId
+                                                })
+                                                .ToList();
+            return View(teams);
+        }
+
         [HttpGet]
         public IActionResult AddPlayer(string joueur)
         {
-            Player? player = JsonSerializer.Deserialize<Player>(joueur);
-            AppDao.players.Add(player);
+            PlayerDto? playerDto = JsonSerializer.Deserialize<PlayerDto>(joueur);
+
+            if (playerDto != null)
+            {
+                Player player = new Player
+                {
+                    Id = playerDto.Id,
+                    Name = playerDto.Name,
+                    Age = playerDto.Age,
+                    Country = playerDto.Country,
+                    TeamId = playerDto.TeamId
+                };
+
+                context.Players.Add(player);
+                context.SaveChanges();
+            }
             return RedirectToAction("index");
         }
 
         public IActionResult FilterTeams(int minPlayers = 0)
         {
-            List<Player> players = AppDao.GetPlayers();
+            List<PlayerDto> players = context.Players
+                                                .AsNoTracking()
+                                                .Select(p => new PlayerDto
+                                                {
+                                                    Id = p.Id,
+                                                    Name = p.Name,
+                                                    Age = p.Age,
+                                                    Country = p.Country,
+                                                    TeamId = p.TeamId
+                                                })
+                                                .ToList();
             Debug.WriteLine("Action exécutée");
        
             List<TeamResult> filteredTeams = players
-                .GroupBy(p => p.TeamName)
+                .GroupBy(p => p.TeamId)
                 .Select(g => new TeamResult
                 {
-                    Name = g.Key,
+                    Name = context.Teams?.Find(g.Key).Name,
                     PlayerCount = g.Count()
                 })
                 .Where(t => t.PlayerCount >= minPlayers)
@@ -82,12 +140,21 @@ namespace MyMvcHost.Controllers
 
         public IActionResult GetPlayersStartWith(string startToken = "")
         {
-            List<Player> filteredPlayers = AppDao.GetPlayers()
-                                                    .Where(p => p.Name.ToLower().StartsWith(startToken.ToLower()))
-                                                    .ToList();
-                                                
+            List<PlayerDto> filteredPlayers = context.Players
+                                                        .AsNoTracking()
+                                                        .Where(p => p.Name.ToLower().StartsWith(startToken.ToLower()))
+                                                        .Select(p => new PlayerDto
+                                                        {
+                                                            Id = p.Id,
+                                                            Name = p.Name,
+                                                            Age = p.Age,
+                                                            Country = p.Country,
+                                                            TeamId = p.TeamId
+                                                        })
+                                                        .ToList();
+
             return View(filteredPlayers);
         }
-        */
+        
     }
 }

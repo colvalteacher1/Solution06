@@ -1,8 +1,9 @@
-﻿@using SharedModelsLib.Dto;
+﻿
+@using SharedModelsLib.Dto;
 @model List<TeamDto>
 
 @{
-    ViewData["Title"] = "Liste des teams";
+    ViewData["Title"] = "Ajouter un joueur";
 }
 
 @if(Model == null)
@@ -12,7 +13,7 @@
 else
 {
     
-    <component type="typeof(MyBlazorLib.Components.Pages.TeamsComponent)"
+    <component type="typeof(MyBlazorLib.Components.Pages.AddPlayer)"
                render-mode="Server"
                param-Teams="Model" />
 }
