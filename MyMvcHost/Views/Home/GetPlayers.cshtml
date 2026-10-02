@@ -1,0 +1,19 @@
+﻿@* @using SharedModelsLib;
+@model List<Player>
+
+@{
+    ViewData["Title"] = "Liste des joueurs";
+}
+
+@if(Model == null)
+{
+    <p class="badge bg-warning">Joueur introuvable</p>
+}
+else
+{
+    
+    <component type="typeof(MyBlazorLib.Components.Pages.PlayersComponent)"
+               render-mode="Server"
+               param-Players="Model" />
+}
+ *@

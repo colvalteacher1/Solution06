@@ -1,0 +1,66 @@
+﻿@* 
+@using SharedModelsLib;
+
+@using System.Linq
+
+<EditForm Model="@filterModel" OnValidSubmit="FilterPlayers">
+
+    <div class="card p-3">
+        <h4>Filtrer les joueurs</h4>
+
+        <div class="mb-3">
+            <label class="form-label">
+                Joueurs commencent par :
+            </label>
+
+            <InputText class="form-control"
+                         @bind-Value="filterModel.StartToken" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Filtrer
+        </button>
+    </div>
+
+</EditForm>
+
+@if (FilteredPlayers.Any())
+{
+    <div class="mt-4">
+        <h5>Joueur qui commencent par @filterModel.StartToken</h5>
+
+        <ul class="list-group">
+            @foreach (var player in FilteredPlayers)
+            {
+                <li class="list-group-item">
+                    <strong>@player.Name</strong>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<Player> FilteredPlayers { get; set; }
+
+    private FilterModel filterModel = new()
+    {
+        StartToken = ""
+    };
+
+    [Inject]
+    private NavigationManager Navigation { get; set; } = default!;
+
+    private void FilterPlayers()
+    {
+        Navigation.NavigateTo(
+            $"/home/GetPlayersStartWith?startToken={filterModel.StartToken}"
+        );
+    }
+
+    public class FilterModel
+    {
+        public string StartToken { get; set; }
+    }
+} *@

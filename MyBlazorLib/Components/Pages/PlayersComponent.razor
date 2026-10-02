@@ -1,0 +1,45 @@
+﻿@* @inject NavigationManager NavManager
+
+@using SharedModelsLib;
+
+@if (Players != null)
+{
+    <p class="badge bg-success">Il y a @Players.Count joueurs</p>
+}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Liste des équipes</h2>
+    <a class="btn btn-primary" href="/players/add">Ajouter</a>
+    <br />
+    <br />
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nom du joueur</th>
+                    <th>Age</th>
+                    <th>Pays</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var player in Players)
+                {
+                    <tr>
+                        <td>@player.Name</td>
+                        <td>@player.Age</td>
+                        <td>@player.Country</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div> 
+
+
+@code {
+
+    [Parameter]
+    public List<Player> Players { get; set; }
+
+    
+} *@

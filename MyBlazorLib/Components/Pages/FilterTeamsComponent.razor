@@ -1,0 +1,69 @@
+﻿@* 
+@using SharedModelsLib;
+
+@using System.Linq
+
+<EditForm Model="@filterModel" OnValidSubmit="FilterTeams">
+
+    <div class="card p-3">
+        <h4>Filtrer les équipes</h4>
+
+        <div class="mb-3">
+            <label class="form-label">
+                Nombre minimum de joueurs :
+            </label>
+
+            <InputNumber class="form-control"
+                         @bind-Value="filterModel.MinPlayers" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Filtrer
+        </button>
+    </div>
+
+</EditForm>
+
+@if (FilteredTeams.Any())
+{
+    <div class="mt-4">
+        <h5>Équipes avec au moins @filterModel.MinPlayers joueur(s)</h5>
+
+        <ul class="list-group">
+            @foreach (var team in FilteredTeams)
+            {
+                <li class="list-group-item">
+                    <strong>@team.Name</strong>
+                    <span class="badge bg-primary float-end">
+                        @team.PlayerCount joueur(s)
+                    </span>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<TeamResult> FilteredTeams { get; set; }
+
+    private FilterModel filterModel = new()
+    {
+        MinPlayers = 1
+    };
+
+    [Inject]
+    private NavigationManager Navigation { get; set; } = default!;
+
+    private void FilterTeams()
+    {
+        Navigation.NavigateTo(
+            $"/home/FilterTeams?minPlayers={filterModel.MinPlayers}"
+        );
+    }
+
+    public class FilterModel
+    {
+        public int MinPlayers { get; set; }
+    }
+} *@

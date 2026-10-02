@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="MyBlazorLib/MyBlazorLib.csproj" />
+  <Project Path="MyMvcHost/MyMvcHost.csproj" />
+  <Project Path="SharedModelsLib/SharedModelsLib.csproj" />
+</Solution>

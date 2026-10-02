@@ -1,0 +1,40 @@
+﻿@* @inject NavigationManager NavManager
+
+@using SharedModelsLib;
+
+@if (Teams != null)
+{
+    <p class="badge bg-success">Il y a @Teams.Count équipes</p>
+}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Liste des équipes</h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nom du l'équipe</th>
+                    <th>Joueurs</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var team in Teams)
+                {
+                    <tr>
+                        <td>@team.Name</td>
+                        <td>
+                            <a href="/home/GetPlayers?teamName=@team.Name">Joueurs</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div> 
+
+
+@code {
+
+    [Parameter]
+    public List<Team> Teams { get; set; }
+} *@

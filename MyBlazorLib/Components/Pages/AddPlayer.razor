@@ -1,0 +1,66 @@
+﻿@* @page "/players/add"
+
+@inject NavigationManager NavManager
+@using System.Text.Json
+@using SharedModelsLib
+@rendermode InteractiveServer
+
+<h3 class="mb-4">Ajouter un joueur</h3>
+
+<EditForm Model="@player" OnValidSubmit="@AddNewPlayer">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Nom du joueur</label>
+        <InputText class="form-control"
+                   @bind-Value="player.Name" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Âge</label>
+        <InputNumber class="form-control"
+                     @bind-Value="player.Age" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Pays d'origine</label>
+        <InputText class="form-control"
+                   @bind-Value="player.Country" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Nom de l'équipe</label>
+        <InputText class="form-control"
+                   @bind-Value="player.TeamName" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Ajouter le joueur
+    </button>
+
+</EditForm>
+
+@if (message != null)
+{
+    <div class="alert alert-success mt-3">
+        @message
+    </div>
+}
+
+@code {
+    private Player player = new();
+
+    private string? message;
+
+
+
+    private void AddNewPlayer() 
+    {
+        string json = JsonSerializer.Serialize(player);
+        NavManager.NavigateTo($"/home/AddPlayer?joueur={json}", forceLoad: true);
+    }
+   
+
+
+} *@
